@@ -64,4 +64,5 @@
     $('#preview-title').textContent = it.file.name;
     $('#preview').textContent = previewText;
   }
+  Site.handoff.take().then(f => { if (f) add([f]); });
 })();

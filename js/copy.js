@@ -117,4 +117,5 @@
     download(state.result.bytes, `${baseName(state.tgt.file.name)}-with-exif.${ext}`, state.tgt.file.type || 'image/jpeg');
     toast('Saved. Your originals are unchanged.');
   });
+  Site.handoff.take().then(f => { if (f) load('src', f); });
 })();

@@ -29,6 +29,11 @@
     const flagHtml = meta.flags.length
       ? `<div class="flags">${meta.flags.map(f => `<div class="flag ${f.level}"><b>${esc(f.title)}</b><span>${esc(f.detail)}</span></div>`).join('')}</div>`
       : '';
+    const risks = meta.flags.filter(f => f.level !== 'low').length;
+    const canFix = meta.canWrite;
+    const fixHtml = !risks ? '' : canFix
+      ? `${meta.gps ? '<button class="btn" id="fix-gps">Remove location only</button>' : ''}<button class="btn primary" id="fix-all">Clean everything &amp; download</button><div class="muted small">Done in this tab. Pixels aren’t re-compressed.</div>`
+      : `<button class="btn primary" data-go="remove.html">Clean in the Remove tool →</button>`;
     const headline = s.camera || s.exposure
       ? `<div class="headline">${s.camera ? `<div class="cam">${esc(s.camera)}</div>` : ''}${s.lens ? `<div class="sub">${esc(s.lens)}</div>` : ''}${s.exposure ? `<div class="exp">${esc(s.exposure)}</div>` : ''}</div>`
       : '';
@@ -50,7 +55,7 @@
           <div class="meta"><div class="file">${esc(file.name)}</div><dl class="facts">${facts.map(f => `<div><dt>${f[0]}</dt><dd>${esc(f[1])}</dd></div>`).join('')}</dl>
           <button class="btn small" id="another">Choose another photo</button></div>
         </div>
-        ${flagHtml ? `<div><div class="slot-title">Privacy check</div>${flagHtml}</div>` : ''}
+        ${flagHtml ? `<div id="privacy"><div class="slot-title">Privacy check${risks ? ` · ${risks} thing${risks === 1 ? '' : 's'} to review` : ' · looks clean'}</div>${flagHtml}<div id="fix" class="stack" style="margin-top:10px">${fixHtml}</div></div>` : ''}
       </aside>
       <div class="stack">
         <div class="panel" style="overflow:hidden">
@@ -60,11 +65,32 @@
           ${empty}${groups}${xmp}
         </div>
         <div class="panel panel-pad"><div class="row" style="justify-content:space-between"><div><b>What next?</b><div class="muted small">Your file is still only in this tab.</div></div>
-          <div class="row"><a class="btn small" href="remove.html">Remove metadata</a><a class="btn small" href="edit.html">Edit EXIF</a><a class="btn small" href="copy.html">Copy EXIF</a></div></div></div>
+          <div class="row"><button class="btn small" data-go="remove.html">Remove metadata</button><button class="btn small" data-go="edit.html">Edit EXIF</button><button class="btn small" data-go="copy.html">Copy EXIF</button><button class="btn small" data-go="extract.html">Extract</button></div></div></div>
         <div class="notice">Tired of downloading photos just to look inside? The <a data-ext href="${Site.EXTENSION_URL}" target="_blank" rel="noopener"><b>EasyEXIF extension</b></a> shows this on any website.</div>
       </div></div>`;
 
     if (!Site.EXTENSION_URL) Site.comingSoon(out);
+    out.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', async () => { await Site.handoff.put(file); location.href = b.dataset.go; }));
+    const done = (removed, bytesOut, name, type) => {
+      download(bytesOut, name, type);
+      const after = ExifCore.readMetadata(bytesOut);
+      const left = after.flags.filter(f => f.level !== 'low');
+      $('#fix').innerHTML = `<div class="notice ok"><b>✓ Clean copy saved.</b> ${esc(removed)}${left.length ? ` Still present: ${esc(left.map(f => f.title).join(', '))}.` : ' We re-checked the new file and found nothing sensitive.'}</div>
+        <div class="row"><button class="btn small" id="again">Check another photo</button><button class="btn small" data-go="remove.html">Clean many photos at once</button><a class="btn small" data-ext href="${Site.EXTENSION_URL}" target="_blank" rel="noopener">See EXIF on any website: Add to Chrome</a></div>`;
+      $('#again').addEventListener('click', () => drop.click());
+      $('#fix').querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', async () => { await Site.handoff.put(file); location.href = b.dataset.go; }));
+      if (!Site.EXTENSION_URL) Site.comingSoon($('#fix'));
+    };
+    const fixAll = $('#fix-all'), fixGps = $('#fix-gps');
+    const ext = Site.extOf(file.name) || 'jpg', base = baseName(file.name);
+    if (fixAll) fixAll.addEventListener('click', () => {
+      try { done('Location, serial numbers, names, thumbnail and other metadata were removed.', ExifCore.stripMetadata(data), `${base}-clean.${ext}`, file.type); }
+      catch (err) { toast(err.message || 'Could not clean this photo.'); }
+    });
+    if (fixGps) fixGps.addEventListener('click', () => {
+      try { done('The GPS location was removed. Other details such as camera and date were kept.', ExifCore.removeGps(data), `${base}-no-location.${ext}`, file.type); }
+      catch (err) { toast(err.message || 'Could not remove the location.'); }
+    });
     $('#pv').addEventListener('error', () => { $('.preview .frame').hidden = true; });
     $('#another').addEventListener('click', () => drop.click());
     $('#q').addEventListener('input', e => {

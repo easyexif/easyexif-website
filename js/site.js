@@ -135,5 +135,29 @@
     });
   }
 
-  window.Site = { $, $$, esc, bytes, download, toast, readBytes, baseName, extOf, dropzone, dropMarkup, ICONS, EXTENSION_URL, comingSoon };
+  /** Carries a photo from one tool page to the next (IndexedDB; stays on this device). */
+  const handoff = {
+    db: () => new Promise((resolve, reject) => {
+      const r = indexedDB.open('easyexif', 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('handoff');
+      r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error);
+    }),
+    async put(file) {
+      try {
+        const db = await this.db();
+        await new Promise((res, rej) => { const tx = db.transaction('handoff', 'readwrite'); tx.objectStore('handoff').put({ name: file.name, type: file.type, blob: file, at: Date.now() }, 'file'); tx.oncomplete = res; tx.onerror = () => rej(tx.error); });
+        db.close();
+      } catch (e) { /* private mode: the next page just starts empty */ }
+    },
+    async take() {
+      try {
+        const db = await this.db();
+        const rec = await new Promise((res, rej) => { const tx = db.transaction('handoff', 'readwrite'); const st = tx.objectStore('handoff'); const g = st.get('file'); g.onsuccess = () => { st.delete('file'); res(g.result); }; g.onerror = () => rej(g.error); });
+        db.close();
+        return rec && Date.now() - rec.at < 120000 ? new File([rec.blob], rec.name, { type: rec.type }) : null;
+      } catch (e) { return null; }
+    }
+  };
+
+  window.Site = { $, $$, esc, bytes, download, toast, readBytes, baseName, extOf, dropzone, dropMarkup, ICONS, EXTENSION_URL, comingSoon, handoff };
 })();

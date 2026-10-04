@@ -967,6 +967,17 @@
     return webpRebuild(u8, { dropExif: true, dropXmp: true, insertExif });
   }
 
+  /** Removes only the GPS block, keeping the rest of the EXIF. */
+  function removeGps(buffer) {
+    const u8 = toU8(buffer);
+    requireWritable(detectFormat(u8));
+    const t = extractExifTiff(u8), tiff = t && parseTiff(t);
+    if (!tiff || !tiff.gps) return u8;
+    const model = toModel(tiff);
+    model.gps = [];
+    return setExifBlock(u8, serializeModel(model));
+  }
+
   /** Re-draws any decodable image to a PNG/JPEG with no metadata (fallback for GIF, BMP, AVIF…). */
   async function reencode(blob, mime = 'image/png', quality = 0.95) {
     const bmp = await createImageBitmap(blob);
@@ -1064,7 +1075,7 @@
 
   window.ExifCore = {
     readMetadata, detectFormat, extractExifTiff, parseTiff, getEntry, formatEntry, humanize,
-    stripMetadata, setExifBlock, reencode,
+    stripMetadata, removeGps, setExifBlock, reencode,
     toModel, cloneModel, setEntry, removeEntry, serializeModel, encodeEntry, patchOrientation, orientationOf, orientationTiff,
     exifDate, localFromExifDate, parseFraction, setGps, toRational,
     toPlainObject, toCsv, toText, makeZip, crc32,

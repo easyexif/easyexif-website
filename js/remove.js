@@ -85,4 +85,5 @@
     download(ExifCore.makeZip(files), 'clean-photos.zip');
     toast('ZIP created on your device');
   }
+  Site.handoff.take().then(f => { if (f) add([f]); });
 })();

@@ -144,4 +144,5 @@
       toast(err.message || 'Could not edit this photo.');
     }
   });
+  Site.handoff.take().then(f => { if (f) open(f); });
 })();
