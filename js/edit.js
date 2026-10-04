@@ -70,7 +70,7 @@
   function renderNotes() {
     const notes = [];
     const t = state.meta.tiff;
-    if (t && (C.getEntry(t, 'exif', 'MakerNote') || state.meta.thumbnail)) notes.push('<div class="notice">This photo has a maker note or embedded thumbnail. They are left out of the edited copy because their internal offsets can’t be moved safely.</div>');
+    if (t && (C.getEntry(t, 'exif', 'MakerNote') || state.meta.thumbnail)) notes.push('<div class="notice">Heads up: this photo contains extra camera-brand data (a “maker note”, such as autofocus details) and a tiny built-in preview image. The edited copy leaves both out. Everything else, including your edits, the camera, date and location, is kept, and the picture itself is unchanged.</div>');
     if (!t) notes.push('<div class="notice">This photo has no EXIF yet. Fill in any fields to add some.</div>');
     $('#notes').innerHTML = notes.join('');
   }

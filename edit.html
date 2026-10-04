@@ -81,7 +81,7 @@
   <section class="block wrap narrow prose">
     <h2>What you can change</h2>
     <p>Edit the date taken, camera make and model, lens, software, artist, copyright, description, comment, exposure settings, orientation and GPS location. Anything you leave alone is preserved byte-for-byte. Clear a field to delete that tag.</p>
-    <p>Editing works on JPEG, PNG and WebP files. When a photo is edited, the proprietary maker note and the small embedded thumbnail are not carried across, because their internal addresses cannot be safely moved. The image itself is never re-compressed.</p>
+    <p>Editing works on JPEG, PNG and WebP files. When a photo is edited, two things are left out of the new copy: the camera brand’s private “maker note” (things like autofocus details) and the tiny preview image stored inside the file. Editing would break their internal links, so they are dropped instead of risking a damaged file. The image itself is never re-compressed.</p>
   </section>
 
   <section class="block" data-site="tools"></section>

@@ -101,7 +101,7 @@
     }
     state.result = result;
     save.disabled = false;
-    if (result.rebuilt) warn.innerHTML = '<div class="notice">A fresh EXIF block is built for this copy, so the camera’s proprietary maker note is left out.</div>';
+    if (result.rebuilt) warn.innerHTML = '<div class="notice">Because you turned something off, a fresh set of details is built for this copy. The camera brand’s private “maker note” (such as autofocus details) is left out.</div>';
     const after = C.readMetadata(result.bytes);
     const before = state.tgt.meta;
     const gpsText = m => (m.gps ? `${m.gps.lat.toFixed(4)}, ${m.gps.lon.toFixed(4)}` : '—');
