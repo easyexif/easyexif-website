@@ -7,7 +7,7 @@
   const MIME = { jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp' };
   const EXT = { jpeg: 'jpg', png: 'png', webp: 'webp' };
 
-  dropzone(drop, { multiple: true, paste: true, onFiles: add });
+  dropzone(drop, { multiple: true, paste: true, page: true, onFiles: add });
   $('#opt-ori').addEventListener('change', reprocessAll);
   $('#opt-icc').addEventListener('change', reprocessAll);
   $('#clear').addEventListener('click', () => { items.splice(0).forEach(i => URL.revokeObjectURL(i.url)); render(); });

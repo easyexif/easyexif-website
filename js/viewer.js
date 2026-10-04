@@ -5,7 +5,7 @@
   drop.innerHTML = dropMarkup('Drop a photo here, or click to choose', 'JPEG, PNG, WebP, HEIC, AVIF or TIFF. You can also paste an image.');
   let objectUrl = null;
 
-  dropzone(drop, { paste: true, onFiles: files => show(files[0]) });
+  dropzone(drop, { paste: true, page: true, onFiles: files => show(files[0]) });
 
   async function show(file) {
     out.hidden = false;

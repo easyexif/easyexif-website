@@ -7,7 +7,7 @@
   const items = [];
   let previewIndex = -1, previewText = '';
 
-  dropzone(drop, { multiple: true, paste: true, onFiles: add });
+  dropzone(drop, { multiple: true, paste: true, page: true, onFiles: add });
   $('#clear').addEventListener('click', () => { items.splice(0).forEach(i => URL.revokeObjectURL(i.url)); previewIndex = -1; render(); });
   $('#all-csv').addEventListener('click', () => download(C.toCsv(items.map(i => ({ name: i.file.name, meta: i.meta }))), 'exif-metadata.csv', 'text/csv'));
   $('#all-json').addEventListener('click', () => {

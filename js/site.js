@@ -47,7 +47,7 @@
   const extOf = name => (/\.([^.]+)$/.exec(name) || [, ''])[1].toLowerCase();
 
   /** Wires a drop area: click, keyboard, drag-and-drop (and optionally paste). */
-  function dropzone(el, { multiple = false, accept = 'image/*,.heic,.heif,.avif,.tif,.tiff', onFiles, paste = false }) {
+  function dropzone(el, { multiple = false, accept = 'image/*,.heic,.heif,.avif,.tif,.tiff', onFiles, paste = false, page = false }) {
     const input = el.querySelector('input[type=file]');
     input.accept = accept; input.multiple = multiple;
     el.tabIndex = 0; el.setAttribute('role', 'button');
@@ -61,11 +61,31 @@
       const files = Array.from(e.dataTransfer.files);
       if (files.length) onFiles(multiple ? files : files.slice(0, 1));
     });
+    if (page) pageDrop(el, multiple, onFiles);
     if (paste) document.addEventListener('paste', e => {
       const files = Array.from(e.clipboardData ? e.clipboardData.files : []).filter(f => f.type.startsWith('image/'));
       if (files.length) onFiles(multiple ? files : files.slice(0, 1));
     });
     return { open };
+  }
+  /** Lets files be dropped anywhere on the page (the dropzone itself keeps handling its own drops). */
+  function pageDrop(el, multiple, onFiles) {
+    const overlay = document.createElement('div');
+    overlay.className = 'page-drop'; overlay.hidden = true;
+    overlay.innerHTML = '<div><strong>Drop to open</strong><span>Release anywhere to choose this photo</span></div>';
+    document.body.appendChild(overlay);
+    const hasFiles = e => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+    let depth = 0;
+    document.addEventListener('dragenter', e => { if (!hasFiles(e)) return; depth++; overlay.hidden = false; });
+    document.addEventListener('dragleave', e => { if (!hasFiles(e)) return; depth = Math.max(0, depth - 1); if (!depth) overlay.hidden = true; });
+    document.addEventListener('dragover', e => { if (hasFiles(e)) e.preventDefault(); });
+    document.addEventListener('drop', e => {
+      if (!hasFiles(e)) return;
+      e.preventDefault(); depth = 0; overlay.hidden = true;
+      if (el.contains(e.target)) return;   // already handled by the dropzone
+      const files = Array.from(e.dataTransfer.files);
+      if (files.length) onFiles(multiple ? files : files.slice(0, 1));
+    });
   }
   const dropMarkup = (title, hint) => `<input type="file"><div class="icon">${ICONS.upload}</div><strong>${title}</strong><span>${hint}</span>`;
 

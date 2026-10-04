@@ -7,7 +7,7 @@
   let state = null, objectUrl = null;
   const fields = $$('[data-tag]');
 
-  dropzone(drop, { paste: true, onFiles: files => open(files[0]) });
+  dropzone(drop, { paste: true, page: true, onFiles: files => open(files[0]) });
   $('#another').addEventListener('click', () => drop.click());
 
   async function open(file) {
