@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EXIF Viewer & Photo Metadata Tools | EasyEXIF</title>
+<meta name="description" content="Free online EXIF viewer. Drop in any photo to see its camera, lens, settings, date and GPS location. Then edit, remove, copy or extract metadata. Runs in your browser and never uploads your images.">
+<meta property="og:title" content="EasyEXIF: free EXIF viewer and photo metadata tools">
+<meta property="og:description" content="View, edit, remove, copy and extract EXIF data in your browser. Your photos are never uploaded.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="css/site.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"EasyEXIF EXIF Viewer","applicationCategory":"MultimediaApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"View, edit, remove, copy and extract EXIF metadata from photos entirely in your browser."}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is EXIF data?","acceptedAnswer":{"@type":"Answer","text":"EXIF (Exchangeable Image File Format) is information a camera or phone stores inside a photo: the device model, lens, exposure settings, the date and time, and often the GPS location where it was taken."}},
+{"@type":"Question","name":"Is it safe to upload my photo here?","acceptedAnswer":{"@type":"Answer","text":"Nothing is uploaded. The viewer and editor run locally in your browser, so you can inspect or change metadata without sending images to a server."}},
+{"@type":"Question","name":"Why does my photo have no EXIF data?","acceptedAnswer":{"@type":"Answer","text":"Many websites, messaging apps and social networks remove metadata when you upload a picture. Screenshots and edited exports can also lack it."}}]}</script>
+</head>
+<body data-tool="view">
+<div data-site="header"></div>
+<main>
+  <section class="hero wrap">
+    <span class="eyebrow">Runs in your browser. Photos never leave your device.</span>
+    <h1>See what your photos <em>reveal</em></h1>
+    <p>Drop in any photo to see its camera, lens, settings, date and GPS location. The viewer and editor work locally, so you can inspect or change metadata without sending images to a server.</p>
+  </section>
+
+  <section class="wrap tool">
+    <div class="drop" id="drop"></div>
+    <div id="out" hidden></div>
+  </section>
+
+  <section class="block wrap narrow prose">
+    <h2>What is EXIF data?</h2>
+    <p>Every photo from a phone or camera carries a hidden block of text called EXIF. It records the camera and lens, aperture, shutter speed and ISO, the date and time, the image size, and often the exact GPS coordinates of where you were standing. It is handy for photographers and risky if you share a photo of your home.</p>
+    <p>This viewer reads that block, plus XMP, IPTC and embedded colour profiles, and flags the parts that could be sensitive. When you are ready to act on it, use the other tools to <a href="remove.html">remove location data</a>, <a href="edit.html">edit EXIF fields</a>, <a href="copy.html">copy EXIF between photos</a> or <a href="extract.html">export it</a>.</p>
+  </section>
+
+  <section class="block" data-site="tools"></section>
+  <section class="promo" data-site="promo"></section>
+
+  <section class="block wrap narrow">
+    <div class="section-title"><h2>Questions</h2></div>
+    <div class="faq">
+      <details><summary>Is it safe to use with private photos?</summary><p>Yes. The viewer and editor work locally in your browser, so you can inspect or change metadata without sending images to a server. You can even disconnect from the internet after the page loads and everything keeps working.</p></details>
+      <details><summary>Which formats are supported?</summary><p>You can view metadata in JPEG, PNG, WebP, TIFF, HEIC and AVIF files. Editing, removing and copying work on JPEG, PNG and WebP.</p></details>
+      <details><summary>Why does my photo show no EXIF data?</summary><p>Many websites, messaging apps and social networks remove metadata when you upload a picture, and screenshots never have camera data. If you saved the photo from a website, the original may have been stripped before it reached you.</p></details>
+      <details><summary>Does a phone photo really contain my location?</summary><p>If location services are on for your camera app, yes: the latitude and longitude are written into the file. The viewer shows it and offers a one-click way to remove it.</p></details>
+    </div>
+  </section>
+</main>
+<div data-site="footer"></div>
+<script src="js/exif-core.js"></script>
+<script src="js/site.js"></script>
+<script src="js/viewer.js"></script>
+</body>
+</html>

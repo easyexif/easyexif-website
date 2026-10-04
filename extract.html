@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extract EXIF Data to JSON, CSV or Text | EasyEXIF</title>
+<meta name="description" content="Extract EXIF metadata from photos and export it as JSON, CSV or plain text. Also save the embedded thumbnail and raw XMP. Works in your browser, with no upload.">
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="css/site.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How do I export EXIF data to a spreadsheet?","acceptedAnswer":{"@type":"Answer","text":"Drop one or many photos into the EasyEXIF extractor and download the combined CSV. Each row is one tag from one photo, ready to open in Excel or Google Sheets."}}]}</script>
+</head>
+<body data-tool="extract">
+<div data-site="header"></div>
+<main>
+  <section class="hero wrap">
+    <span class="eyebrow">Runs in your browser. Photos never leave your device.</span>
+    <h1>Extract <em>EXIF data</em> to JSON, CSV or text</h1>
+    <p>Pull the metadata out of one photo or hundreds. Save it as a spreadsheet, a JSON file or a text report, along with the embedded thumbnail and raw XMP.</p>
+  </section>
+
+  <section class="wrap tool stack">
+    <div class="drop" id="drop"></div>
+    <div id="work" class="stack" hidden>
+      <div class="panel panel-pad row" style="justify-content:space-between">
+        <div><b id="count"></b><div class="muted small">Exports include every tag found in each photo.</div></div>
+        <div class="row"><button class="btn primary" id="all-csv">Download CSV</button><button class="btn" id="all-json">Download JSON</button><button class="btn" id="clear">Clear</button></div>
+      </div>
+      <div class="files" id="list"></div>
+      <div class="panel" id="preview-panel" hidden style="overflow:hidden"><div class="results-head"><b id="preview-title"></b><button class="btn small" id="preview-copy">Copy</button></div><pre class="xmp-raw" id="preview" style="max-height:420px"></pre></div>
+    </div>
+  </section>
+
+  <section class="block wrap narrow prose">
+    <h2>What you get</h2>
+    <p><b>CSV</b> has one row per tag with the file name, group, tag and value columns, so many photos stack neatly in one spreadsheet. <b>JSON</b> keeps each photo’s metadata grouped. <b>Text</b> is a readable report for a single photo. You can also save the small preview image that many cameras embed in the file, and the raw XMP block.</p>
+    <p>Reads JPEG, PNG, WebP, TIFF, HEIC and AVIF. Includes EXIF, GPS, XMP, IPTC and colour profile details.</p>
+  </section>
+
+  <section class="block" data-site="tools"></section>
+  <section class="promo" data-site="promo"></section>
+
+  <section class="block wrap narrow">
+    <div class="section-title"><h2>Questions</h2></div>
+    <div class="faq">
+      <details><summary>Are my photos uploaded?</summary><p>No. Extraction runs entirely in this tab.</p></details>
+      <details><summary>Why is the embedded thumbnail sometimes different from the photo?</summary><p>The thumbnail is written when the photo is taken and edits often do not update it. That is why it can show the uncropped original.</p></details>
+    </div>
+  </section>
+</main>
+<div data-site="footer"></div>
+<script src="js/exif-core.js"></script>
+<script src="js/site.js"></script>
+<script src="js/extract.js"></script>
+</body>
+</html>

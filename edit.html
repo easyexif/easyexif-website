@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EXIF Editor: Edit Photo Metadata Online | EasyEXIF</title>
+<meta name="description" content="Edit EXIF data online: change the date taken, camera, lens, copyright, artist or GPS location of a JPEG, PNG or WebP photo. Works locally in your browser, with no upload.">
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="css/site.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How do I change the date taken of a photo?","acceptedAnswer":{"@type":"Answer","text":"Open the photo in the EasyEXIF editor, change the Date taken field, and download the edited copy. The original file is never modified."}},
+{"@type":"Question","name":"Can I add a GPS location to a photo?","acceptedAnswer":{"@type":"Answer","text":"Yes. Enter a latitude and longitude, or paste a pair of coordinates, and the location is written into the photo's EXIF data."}}]}</script>
+</head>
+<body data-tool="edit">
+<div data-site="header"></div>
+<main>
+  <section class="hero wrap">
+    <span class="eyebrow">Runs in your browser. Photos never leave your device.</span>
+    <h1>Edit your photo’s <em>EXIF data</em></h1>
+    <p>Fix a wrong date, add copyright, rename the camera or change the location. The editor works locally in your browser, so you can inspect or change metadata without sending images to a server.</p>
+  </section>
+
+  <section class="wrap tool stack">
+    <div class="drop" id="drop"></div>
+    <div class="notice warn" id="unsup" hidden></div>
+    <div id="editor" hidden>
+      <div class="viewer">
+        <aside class="stack">
+          <div class="panel preview">
+            <div class="frame"><img id="pv" alt="Photo being edited"></div>
+            <div class="meta"><div class="file" id="fname"></div><dl class="facts" id="facts"></dl>
+              <button class="btn small" id="another">Choose another photo</button></div>
+          </div>
+        </aside>
+        <div class="stack">
+          <div class="panel panel-pad">
+            <form id="form" class="fields" autocomplete="off">
+              <div class="fieldset-title">Description &amp; rights</div>
+              <div class="field wide"><label for="f-desc">Description</label><input id="f-desc" data-kind="ifd0" data-tag="ImageDescription" data-type="ascii"></div>
+              <div class="field"><label for="f-artist">Artist / photographer</label><input id="f-artist" data-kind="ifd0" data-tag="Artist" data-type="ascii"></div>
+              <div class="field"><label for="f-copy">Copyright</label><input id="f-copy" data-kind="ifd0" data-tag="Copyright" data-type="ascii" placeholder="© 2026 Your Name"></div>
+              <div class="field wide"><label for="f-comment">Comment</label><input id="f-comment" data-kind="exif" data-tag="UserComment" data-type="comment"></div>
+
+              <div class="fieldset-title">Camera</div>
+              <div class="field"><label for="f-make">Make</label><input id="f-make" data-kind="ifd0" data-tag="Make" data-type="ascii"></div>
+              <div class="field"><label for="f-model">Model</label><input id="f-model" data-kind="ifd0" data-tag="Model" data-type="ascii"></div>
+              <div class="field"><label for="f-lens">Lens</label><input id="f-lens" data-kind="exif" data-tag="LensModel" data-type="ascii"></div>
+              <div class="field"><label for="f-soft">Software</label><input id="f-soft" data-kind="ifd0" data-tag="Software" data-type="ascii"></div>
+
+              <div class="fieldset-title">Exposure</div>
+              <div class="field"><label for="f-et">Shutter speed (s)</label><input id="f-et" data-kind="exif" data-tag="ExposureTime" data-type="fraction" placeholder="1/250"></div>
+              <div class="field"><label for="f-fn">Aperture (f-number)</label><input id="f-fn" data-kind="exif" data-tag="FNumber" data-type="number" inputmode="decimal" placeholder="2.8"></div>
+              <div class="field"><label for="f-iso">ISO</label><input id="f-iso" data-kind="exif" data-tag="ISO" data-type="short" inputmode="numeric" placeholder="400"></div>
+              <div class="field"><label for="f-fl">Focal length (mm)</label><input id="f-fl" data-kind="exif" data-tag="FocalLength" data-type="number" inputmode="decimal" placeholder="85"></div>
+
+              <div class="fieldset-title">Date &amp; orientation</div>
+              <div class="field"><label for="f-date">Date taken</label><input id="f-date" type="datetime-local" step="1" data-kind="exif" data-tag="DateTimeOriginal" data-type="date"></div>
+              <div class="field"><label for="f-ori">Orientation</label><select id="f-ori" data-kind="ifd0" data-tag="Orientation" data-type="short">
+                <option value="">Not set</option><option value="1">Normal</option><option value="6">Rotate 90° clockwise</option><option value="3">Rotate 180°</option><option value="8">Rotate 90° counter-clockwise</option>
+                <option value="2">Mirror horizontal</option><option value="4">Mirror vertical</option><option value="5">Mirror + rotate 90° CCW</option><option value="7">Mirror + rotate 90° CW</option></select></div>
+              <label class="check field wide"><input type="checkbox" id="all-dates"><span>Use this date for every date field<small>Also sets Create date and Modify date so they match.</small></span></label>
+
+              <div class="fieldset-title">GPS location</div>
+              <div class="field wide"><label for="f-latlon">Paste coordinates</label><input id="f-latlon" placeholder="37.7749, -122.4194"><small>Latitude, longitude in decimal degrees. Copy these straight from a map app.</small></div>
+              <div class="field"><label for="f-lat">Latitude</label><input id="f-lat" inputmode="decimal"></div>
+              <div class="field"><label for="f-lon">Longitude</label><input id="f-lon" inputmode="decimal"></div>
+              <div class="field"><label for="f-alt">Altitude (m)</label><input id="f-alt" inputmode="decimal"></div>
+              <div class="field" style="align-content:end"><button type="button" class="btn" id="clear-gps">Remove location</button></div>
+            </form>
+          </div>
+          <div id="notes" class="stack"></div>
+          <div class="panel panel-pad row" style="justify-content:space-between">
+            <div><b id="changes">No changes yet</b><div class="muted small">Your original file is never modified. You download a new copy.</div></div>
+            <div class="row"><button class="btn" id="reset">Reset</button><button class="btn primary" id="save" disabled>Download edited photo</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap narrow prose">
+    <h2>What you can change</h2>
+    <p>Edit the date taken, camera make and model, lens, software, artist, copyright, description, comment, exposure settings, orientation and GPS location. Anything you leave alone is preserved byte-for-byte. Clear a field to delete that tag.</p>
+    <p>Editing works on JPEG, PNG and WebP files. When a photo is edited, the proprietary maker note and the small embedded thumbnail are not carried across, because their internal addresses cannot be safely moved. The image itself is never re-compressed.</p>
+  </section>
+
+  <section class="block" data-site="tools"></section>
+  <section class="promo" data-site="promo"></section>
+
+  <section class="block wrap narrow">
+    <div class="section-title"><h2>Questions</h2></div>
+    <div class="faq">
+      <details><summary>Does editing upload my photo?</summary><p>No. The editor is designed to work locally in your browser so you can inspect or change metadata without sending images to a server.</p></details>
+      <details><summary>Will it change the original file?</summary><p>No. Your browser can’t modify files in place. You download a new copy and keep the original.</p></details>
+      <details><summary>Is it okay to fake a date or location?</summary><p>Use it for fixing mistakes: scanned photos, wrong camera clocks, photos taken with location services off. Please do not use it to mislead people.</p></details>
+    </div>
+  </section>
+</main>
+<div data-site="footer"></div>
+<script src="js/exif-core.js"></script>
+<script src="js/site.js"></script>
+<script src="js/edit.js"></script>
+</body>
+</html>

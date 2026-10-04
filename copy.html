@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Copy EXIF Data From One Photo to Another | EasyEXIF</title>
+<meta name="description" content="Copy EXIF metadata from one photo onto another: restore camera info lost in an edit or export, or copy GPS and copyright between images. Works in your browser, with no upload.">
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="css/site.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How do I copy EXIF data from one photo to another?","acceptedAnswer":{"@type":"Answer","text":"Add the photo that has the metadata as the source, add the photo that should receive it as the target, and download the new copy. The pixels of the target are unchanged."}}]}</script>
+</head>
+<body data-tool="copy">
+<div data-site="header"></div>
+<main>
+  <section class="hero wrap">
+    <span class="eyebrow">Runs in your browser. Photos never leave your device.</span>
+    <h1>Copy <em>EXIF data</em> from one photo to another</h1>
+    <p>Exported an edit and lost the camera info? Add the original, add the edit, and put the metadata back. Choose whether to bring along the location and owner details.</p>
+  </section>
+
+  <section class="wrap tool stack">
+    <div class="two">
+      <div class="slot"><div class="slot-title"><i>1</i> Source: has the metadata</div><div class="drop compact" id="drop-src"></div></div>
+      <div class="slot"><div class="slot-title"><i>2</i> Target: receives it</div><div class="drop compact" id="drop-tgt"></div></div>
+    </div>
+    <div id="panel" class="stack" hidden>
+      <div class="panel panel-pad stack">
+        <div class="row" style="justify-content:space-between"><b>Options</b><button class="btn small" id="swap">Swap photos ⇄</button></div>
+        <label class="check"><input type="checkbox" id="o-gps" checked><span>Include GPS location</span></label>
+        <label class="check"><input type="checkbox" id="o-owner" checked><span>Include owner and serial numbers<small>Artist name, camera and lens serial numbers, unique image ID.</small></span></label>
+        <label class="check"><input type="checkbox" id="o-ori" checked><span>Keep the target’s rotation<small>Prevents the target from turning sideways if the source was rotated differently.</small></span></label>
+        <div id="warn"></div>
+      </div>
+      <div class="panel panel-pad stack"><b>Result preview</b><div class="compare" id="compare"></div></div>
+      <div class="panel panel-pad row" style="justify-content:space-between"><div class="muted small">Your original files are never modified. The target’s pixels are not re-compressed.</div>
+        <button class="btn primary" id="save" disabled>Download target with copied EXIF</button></div>
+    </div>
+  </section>
+
+  <section class="block wrap narrow prose">
+    <h2>When copying EXIF is useful</h2>
+    <p>Editing apps and export dialogs often drop camera details. Copying the metadata from your original restores the camera, lens, exposure settings and date so catalogue software sorts the photo correctly again. It also helps when you re-save a scan or a converted file and want the info to follow it.</p>
+    <p>Works between JPEG, PNG and WebP. The source can also be TIFF, HEIC or AVIF. With every option on, the metadata block is copied untouched, including the maker note. If you switch off location or owner details, a clean block is rebuilt without them, and the maker note is left out.</p>
+  </section>
+
+  <section class="block" data-site="tools"></section>
+  <section class="promo" data-site="promo"></section>
+
+  <section class="block wrap narrow">
+    <div class="section-title"><h2>Questions</h2></div>
+    <div class="faq">
+      <details><summary>Are my photos uploaded?</summary><p>No. Both photos stay in this browser tab.</p></details>
+      <details><summary>Will the target photo change?</summary><p>Only its metadata. The pixels are not re-encoded, so quality stays identical.</p></details>
+      <details><summary>What if the source has no EXIF?</summary><p>Then there is nothing to copy and the tool tells you so. Use the <a href="edit.html">editor</a> to type the details in by hand.</p></details>
+    </div>
+  </section>
+</main>
+<div data-site="footer"></div>
+<script src="js/exif-core.js"></script>
+<script src="js/site.js"></script>
+<script src="js/copy.js"></script>
+</body>
+</html>

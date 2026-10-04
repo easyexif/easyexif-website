@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Remove EXIF Data From Photos Online (Free, Private) | EasyEXIF</title>
+<meta name="description" content="Remove EXIF data, GPS location and other hidden metadata from JPEG, PNG and WebP photos. Works on many photos at once, runs in your browser, and never uploads your images.">
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="css/site.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How do I remove location data from a photo?","acceptedAnswer":{"@type":"Answer","text":"Drop the photo into the EasyEXIF remover. It deletes the EXIF block, which holds the GPS coordinates, together with XMP, IPTC and comments, and gives you a clean copy to download."}},
+{"@type":"Question","name":"Does removing EXIF reduce image quality?","acceptedAnswer":{"@type":"Answer","text":"No. The image data is not re-encoded. Only the metadata around it is removed, so the pixels stay exactly the same."}}]}</script>
+</head>
+<body data-tool="remove">
+<div data-site="header"></div>
+<main>
+  <section class="hero wrap">
+    <span class="eyebrow">Runs in your browser. Photos never leave your device.</span>
+    <h1>Remove <em>EXIF data</em> and location from photos</h1>
+    <p>Strip GPS coordinates, camera serial numbers, timestamps and other hidden details before you post or send a photo. Drop in as many as you like.</p>
+  </section>
+
+  <section class="wrap tool stack">
+    <div class="drop" id="drop"></div>
+    <div id="work" class="stack" hidden>
+      <div class="panel panel-pad stack">
+        <div class="row" style="justify-content:space-between">
+          <div class="stack" style="gap:10px">
+            <label class="check"><input type="checkbox" id="opt-ori" checked><span>Keep the photo’s rotation<small>Otherwise some photos could appear sideways.</small></span></label>
+            <label class="check"><input type="checkbox" id="opt-icc" checked><span>Keep the colour profile<small>Needed for accurate colours. It describes colour, not you.</small></span></label>
+          </div>
+          <div class="row"><button class="btn primary" id="dl-all">Download clean photos</button><button class="btn" id="clear">Clear</button></div>
+        </div>
+      </div>
+      <div class="files" id="list"></div>
+    </div>
+  </section>
+
+  <section class="block wrap narrow prose">
+    <h2>How to remove EXIF data</h2>
+    <ol class="steps">
+      <li><div><b>Drop in your photos</b>JPEG, PNG and WebP are cleaned without touching the pixels. Other formats are re-drawn as a clean PNG.</div></li>
+      <li><div><b>Check what was found</b>Each photo shows what it was carrying, such as GPS, serial numbers or editing history.</div></li>
+      <li><div><b>Download</b>Save one photo, or all of them as a ZIP. Each is re-read afterwards to confirm it is clean.</div></li>
+    </ol>
+    <h2>What gets removed</h2>
+    <p>EXIF (camera, settings, dates, GPS and the embedded thumbnail), XMP, IPTC captions and credits, JPEG comments, PNG text chunks, and any extra data appended after the image. The picture itself is not re-compressed.</p>
+  </section>
+
+  <section class="block" data-site="tools"></section>
+  <section class="promo" data-site="promo"></section>
+
+  <section class="block wrap narrow">
+    <div class="section-title"><h2>Questions</h2></div>
+    <div class="faq">
+      <details><summary>Does removing EXIF reduce quality?</summary><p>No. Photos are not re-encoded. Only the metadata around the image is removed, so the pixels stay exactly the same.</p></details>
+      <details><summary>Do social networks already remove it?</summary><p>Many do, but not all, and not for every kind of upload (original-quality downloads, email attachments, forum and marketplace listings, direct messages). Cleaning a photo yourself means you do not have to guess.</p></details>
+      <details><summary>Are my photos uploaded?</summary><p>No. Cleaning happens inside this tab, and the files never touch a server.</p></details>
+    </div>
+  </section>
+</main>
+<div data-site="footer"></div>
+<script src="js/exif-core.js"></script>
+<script src="js/site.js"></script>
+<script src="js/remove.js"></script>
+</body>
+</html>
