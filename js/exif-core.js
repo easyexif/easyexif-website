@@ -811,6 +811,12 @@
     if (xmp) flag('xmp', 'low', 'XMP data', 'Editing history, ratings or keywords may be stored here.');
     if (iptc.length) flag('iptc', 'low', 'IPTC data', 'Captions, credits, keywords or location names may be stored here.');
 
+    const hasRow = (id, re) => out.groups.some(g => g.id === id && g.rows.some(r => re.test(r.name)));
+    out.rights = {
+      copyright: !!s.copyright || hasRow('iptc', /^CopyrightNotice$/) || hasRow('xmp', /rights/i),
+      creator: !!s.artist || hasRow('iptc', /^By-line$/) || hasRow('xmp', /creator/i)
+    };
+
     out.hasMetadata = out.groups.some(g => g.id !== 'file' && g.id !== 'icc') && (!!tiff || !!xmp || iptc.length > 0 || out.groups.some(g => g.id === 'text'));
     return out;
   }

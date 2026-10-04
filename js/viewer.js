@@ -34,6 +34,17 @@
     const fixHtml = !risks ? '' : canFix
       ? `${meta.gps ? '<button class="btn" id="fix-gps">Remove location only</button>' : ''}<button class="btn primary" id="fix-all">Clean everything &amp; download</button><div class="muted small">Done in this tab. Pixels aren’t re-compressed.</div>`
       : `<button class="btn primary" data-go="remove.html">Clean in the Remove tool →</button>`;
+    // Photographer check: only for photos that look like they came from a camera.
+    let proHtml = '';
+    if (meta.summary.camera && meta.rights) {
+      const item = (ok, okText, missText, why, btn, focus) => ok
+        ? `<div class="flag ok"><b>${okText}</b></div>`
+        : `<div class="flag tip"><b>${missText}</b><span>${why}</span>${canFix ? `<button class="btn small" data-go="edit.html?focus=${focus}" style="grid-column:2;justify-self:start;margin-top:6px">${btn}</button>` : ''}</div>`;
+      const both = meta.rights.copyright && meta.rights.creator;
+      proHtml = `<div id="pro"><div class="slot-title">Photographer check${both ? ' · all set' : ''}</div><div class="flags">
+        ${item(meta.rights.copyright, 'Copyright is set', 'Your copyright isn’t set', 'It travels with the file, so anyone who finds your photo can see it’s yours.', 'Add copyright', 'f-copy')}
+        ${item(meta.rights.creator, 'Creator name is set', 'No photographer name', 'Credit yourself so your name stays with the photo.', 'Add your name', 'f-artist')}</div></div>`;
+    }
     const headline = s.camera || s.exposure
       ? `<div class="headline">${s.camera ? `<div class="cam">${esc(s.camera)}</div>` : ''}${s.lens ? `<div class="sub">${esc(s.lens)}</div>` : ''}${s.exposure ? `<div class="exp">${esc(s.exposure)}</div>` : ''}</div>`
       : '';
@@ -61,6 +72,7 @@
           <button class="btn small" id="another">Choose another photo</button></div>
         </div>
         ${flagHtml ? `<div id="privacy"><div class="slot-title">Privacy check${risks ? ` · ${risks} thing${risks === 1 ? '' : 's'} to review` : ' · looks clean'}</div>${flagHtml}<div id="fix" class="stack" style="margin-top:10px">${fixHtml}</div></div>` : ''}
+        ${proHtml}
       </aside>
       <div class="stack">
         <div class="panel" style="overflow:hidden">

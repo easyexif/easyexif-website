@@ -5,6 +5,9 @@
   // Paste the Chrome Web Store listing URL here once it is published.
   // While it is empty, every "Add to Chrome" button shows "Coming soon" instead of a link.
   const EXTENSION_URL = '';
+  // Optional launch-notification box. Paste a form endpoint (Formspree, Buttondown, etc.) to turn it on.
+  // While this is empty, no email box is shown anywhere and nothing is collected.
+  const SIGNUP_URL = '';
 
   const ICONS = {
     view: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
@@ -106,9 +109,30 @@
       <div><h2>See any photo’s EXIF without leaving the page.</h2>
       <p>The EasyEXIF Chrome extension puts camera, lens and exposure details right on top of photos as you browse, so you never have to download an image to peek inside it.</p>
       <ul><li>Hover labels with camera, lens, settings, date and size</li><li>Finds the best available version of an image and downloads it</li><li>Full details window with search, GPS and copy buttons</li><li>Runs locally. No photos or metadata are uploaded</li></ul>
-      <div class="row"><a class="btn primary big" data-ext href="${EXTENSION_URL}" target="_blank" rel="noopener">Add EasyEXIF to Chrome</a></div></div>
+      <div class="row"><a class="btn primary big" data-ext href="${EXTENSION_URL}" target="_blank" rel="noopener">Add EasyEXIF to Chrome</a></div>${signupForm()}</div>
       <div class="mock" aria-hidden="true"><div class="label">Canon EOS R6<br>EF85mm f/1.8 USM<br>85mm · f/2.2 · 1/320s · ISO 400<br>3/12/2026, 12:10:45 AM</div><div class="dl">⬇ Best 1150×1560</div></div>
     </div></div>`;
+  }
+  function signupForm() {
+    if (EXTENSION_URL || !SIGNUP_URL) return '';
+    return `<form class="signup" data-signup action="${SIGNUP_URL}" method="post">
+      <label for="signup-email">Get one email when the extension launches. Nothing else.</label>
+      <div class="row"><input id="signup-email" name="email" type="email" required placeholder="you@example.com" autocomplete="email">
+      <input name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><button class="btn primary" type="submit">Notify me</button></div>
+      <p class="signup-msg" role="status"></p></form>`;
+  }
+  function wireSignup() {
+    document.querySelectorAll('[data-signup]').forEach(form => form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const msg = form.querySelector('.signup-msg'), btn = form.querySelector('button');
+      btn.disabled = true; msg.textContent = '';
+      try {
+        const res = await fetch(SIGNUP_URL, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error();
+        form.querySelector('.row').hidden = true;
+        msg.textContent = 'Thanks! We’ll email you once when it’s live.';
+      } catch (err) { btn.disabled = false; msg.textContent = 'Couldn’t sign you up just now. Please try again later.'; }
+    }));
   }
   function footer() {
     return `<footer class="site-footer"><div class="wrap">
@@ -124,6 +148,7 @@
     const slots = { header: () => header(current), tools: () => toolCards(current), promo, footer };
     $$('[data-site]').forEach(el => { const f = slots[el.dataset.site]; if (f) el.innerHTML = f(); });
     if (!EXTENSION_URL) comingSoon(document);
+    wireSignup();
   });
 
   function comingSoon(root) {

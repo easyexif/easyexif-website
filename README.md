@@ -10,3 +10,6 @@ Static site (no build step, no dependencies) with browser-based photo metadata t
 Preview locally: `python3 -m http.server 8765` in this folder, then open http://localhost:8765.
 Deploy: upload the folder to any static host (Cloudflare Pages, Netlify, GitHub Pages).
 Fonts in `fonts/` are Instrument Sans and IBM Plex Mono (SIL OFL), copied from the extension.
+
+## Launch-notification email box (optional)
+Set `SIGNUP_URL` in `js/site.js` to a form endpoint (Formspree, Buttondown, etc.) to show a "notify me" box in the extension promo. While `SIGNUP_URL` is empty, or once `EXTENSION_URL` is set, no email box appears and nothing is collected. If you turn it on, add a line about it to `privacy.html`.

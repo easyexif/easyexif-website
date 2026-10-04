@@ -238,3 +238,13 @@ section.block { margin-top: 64px; }
 .group.fold[open] summary span:first-child::before { transform: rotate(90deg); }
 .group.fold summary:hover { color: var(--accent-ink); }
 .group.fold[open] summary { padding-bottom: 8px; }
+
+.flag.ok { grid-template-columns: auto 1fr; background: var(--ok-soft); border-color: transparent; color: var(--ok); }
+.flag.ok::before { background: var(--ok); }
+.flag.tip { background: var(--paper); border-style: dashed; }
+.flag.tip::before { background: var(--accent); }
+.signup { margin-top: 18px; display: grid; gap: 8px; }
+.signup label { font-size: 14.5px; color: #e9dfd4; }
+.signup input[type=email] { flex: 1 1 220px; min-width: 0; padding: 11px 14px; border-radius: 11px; border: 1px solid #5a4b3f; background: rgba(255, 255, 255, .06); color: #fff; }
+.signup input[type=email]::placeholder { color: #9d9186; }
+.signup-msg { margin: 0; min-height: 1.2em; font-size: 14px; color: #ffb184; }

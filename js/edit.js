@@ -144,5 +144,11 @@
       toast(err.message || 'Could not edit this photo.');
     }
   });
-  Site.handoff.take().then(f => { if (f) open(f); });
+  Site.handoff.take().then(async f => {
+    if (!f) return;
+    await open(f);
+    const focus = new URLSearchParams(location.search).get('focus');
+    const el = focus && document.getElementById(focus);
+    if (el && !editor.hidden) setTimeout(() => { el.focus({ preventScroll: true }); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 450);
+  });
 })();
