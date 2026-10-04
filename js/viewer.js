@@ -41,8 +41,13 @@
       ? `<div class="headline"><div class="sub">Location</div><div class="cam" style="font-size:18px">${meta.gps.lat.toFixed(5)}, ${meta.gps.lon.toFixed(5)}</div>
          <div class="sub" style="margin-top:6px"><a class="map-link" target="_blank" rel="noopener" href="https://www.openstreetmap.org/?mlat=${meta.gps.lat}&mlon=${meta.gps.lon}#map=15/${meta.gps.lat}/${meta.gps.lon}">Open in OpenStreetMap ↗</a> · opens a new tab; only then are the coordinates sent anywhere</div></div>`
       : '';
-    const groups = meta.groups.map(g => `<div class="group" data-group><h3>${esc(g.title)}<span>${g.rows.length}</span></h3>
-      <table class="tbl"><tbody>${g.rows.map(r => `<tr data-row="${esc((r.label + ' ' + r.name + ' ' + r.value).toLowerCase())}"><th scope="row">${esc(r.label)}</th><td>${esc(r.value)}</td></tr>`).join('')}</tbody></table></div>`).join('');
+    const COLLAPSED = new Set(['xmp']);   // long groups start closed
+    const groups = meta.groups.map(g => {
+      const table = `<table class="tbl"><tbody>${g.rows.map(r => `<tr data-row="${esc((r.label + ' ' + r.name + ' ' + r.value).toLowerCase())}"><th scope="row">${esc(r.label)}</th><td>${esc(r.value)}</td></tr>`).join('')}</tbody></table>`;
+      return COLLAPSED.has(g.id)
+        ? `<details class="group fold" data-group data-fold><summary><span>${esc(g.title)}</span><span>${g.rows.length}</span></summary>${table}</details>`
+        : `<div class="group" data-group><h3>${esc(g.title)}<span>${g.rows.length}</span></h3>${table}</div>`;
+    }).join('');
     const empty = !meta.groups.length || !meta.hasMetadata
       ? `<div class="empty"><h3>${meta.groups.length ? 'No camera data found' : 'No metadata found'}</h3><p>This ${esc(meta.formatName)} has no EXIF block. It may have been stripped by the website or app it came from, or it could be a screenshot or edited export.${meta.format === 'heic' || meta.format === 'avif' ? ' Some HEIC/AVIF layouts store EXIF in a way this viewer cannot read yet.' : ''}</p></div>`
       : '';
@@ -99,6 +104,7 @@
         let any = false;
         g.querySelectorAll('tr').forEach(tr => { const hit = !q || tr.dataset.row.includes(q); tr.hidden = !hit; any = any || hit; });
         g.hidden = !any;
+        if (g.hasAttribute('data-fold')) g.open = !!q && any;   // open folded groups only while a search matches
       });
     });
     $('#copy-all').addEventListener('click', async () => {

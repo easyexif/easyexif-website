@@ -231,3 +231,10 @@ section.block { margin-top: 64px; }
 
 /* When a photo opens, scroll so the results sit below the sticky header with some space above them. */
 #out, #editor, #work, #panel { scroll-margin-top: 84px; }
+
+.group.fold summary { padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; cursor: pointer; list-style: none; font-size: 12px; font-weight: 650; text-transform: uppercase; letter-spacing: .07em; color: var(--faint); }
+.group.fold summary::-webkit-details-marker { display: none; }
+.group.fold summary span:first-child::before { content: "▸"; display: inline-block; width: 1.3em; transition: transform .15s; }
+.group.fold[open] summary span:first-child::before { transform: rotate(90deg); }
+.group.fold summary:hover { color: var(--accent-ink); }
+.group.fold[open] summary { padding-bottom: 8px; }
