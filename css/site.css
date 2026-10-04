@@ -228,3 +228,6 @@ section.block { margin-top: 64px; }
 .page-drop > div { display: grid; gap: 4px; padding: 48px 56px; border: 3px dashed var(--accent); border-radius: 28px; background: var(--accent-soft); color: var(--accent-ink); margin: 16px; }
 .page-drop strong { font-size: 28px; letter-spacing: -.02em; }
 .page-drop span { font-size: 15px; }
+
+/* When a photo opens, scroll so the results sit below the sticky header with some space above them. */
+#out, #editor, #work, #panel { scroll-margin-top: 84px; }
